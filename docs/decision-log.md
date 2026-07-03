@@ -26,3 +26,33 @@ Nunca intentaremos construir el sistema completo de una sola vez.
 DA-004
 
 Cada sesión terminará con una bitácora y un commit.
+
+DA-005
+
+El Dashboard será el centro del sistema.
+
+No mostrará estadísticas del usuario.
+
+Mostrará la acción que se está analizando.
+
+DA-006
+
+InvestAI no trabajará con datos en tiempo real.
+
+Las actualizaciones serán bajo demanda o mediante procesos ETL programados.
+
+DA-007
+
+InvestAI registrará operaciones de inversión, no administrará posiciones como un broker.
+
+DA-008 
+
+El desarrollo de InvestAI estará guiado por historias de usuario (User Stories), priorizando las necesidades del inversionista antes que la implementación técnica.
+
+DA-009
+
+El flujo del Dashboard seguirá el proceso natural de análisis de un inversionista.
+
+DA-010
+
+El Opportunity Score será configurable mediante reglas definidas por el usuario.
