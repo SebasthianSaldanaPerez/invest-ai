@@ -56,3 +56,11 @@ El flujo del Dashboard seguirá el proceso natural de análisis de un inversioni
 DA-010
 
 El Opportunity Score será configurable mediante reglas definidas por el usuario.
+
+DA-011
+
+InvestAI no mostrará información porque exista. Mostrará información porque ayuda al inversionista a tomar una decisión.
+
+DA-012
+
+La lista de seguimiento almacena empresas, no el historial del mercado. La lista de seguimiento solo almacenará el identificador de la empresa y el precio de referencia en el momento en que se añada la empresa. La información actual del mercado se obtendrá siempre de forma dinámica a partir de fuentes de datos externas.
