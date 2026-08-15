@@ -15,10 +15,11 @@ Analyze a company before making an investment decision.
 5. Reads recent news and sentiment analysis.
 6. Reviews financial indicators.
 7. Reviews financial statements.
-8. Checks the Opportunity Score.
-9. Reads the AI-generated analysis.
-10. Decides whether to invest.
-11. Optionally saves the stock to the Watchlist.
+8. Reviews key indicators.
+9. Optionally requests an Opportunity Evaluation.
+10. Optionally requests an AI Analysis.
+11. Decides whether to continue monitoring the stock.
+12. Optionally adds the stock to the Watchlist.
 
 ---
 
@@ -96,3 +97,43 @@ Customize the Opportunity Score calculation.
 3. Assign weights to indicators.
 4. Save configuration.
 5. Future analyses use the updated configuration.
+
+# UC-006 - Add Stock to Watchlist
+
+## Goal
+
+Add a Stock into the the Wathclist
+
+## Main Flow
+
+1. Analyze Stock
+2. Stocks seem interesting
+3. Add to watchlist
+4. Save reference price + date.
+
+# UC-007 - Remove Stock from Watchlist
+
+## Goal
+
+Remove a Stock from Watchlist
+
+## Main Flow
+
+1. Go to watchlist
+2. Click on the remove button
+3. Refresh watchlist
+
+# UC-008 - Generate AI Analysis
+
+## Goal
+
+The user will analys the stocka and if he//she wants, the analysis will be generated
+
+## Main Flow
+
+1. Analys the Stock
+2. Click on the Generate button
+3. Generate the Analysis
+
+
+
