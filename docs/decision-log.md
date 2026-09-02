@@ -64,3 +64,7 @@ InvestAI no mostrará información porque exista. Mostrará información porque 
 DA-012
 
 La lista de seguimiento almacena empresas, no el historial del mercado. La lista de seguimiento solo almacenará el identificador de la empresa y el precio de referencia en el momento en que se añada la empresa. La información actual del mercado se obtendrá siempre de forma dinámica a partir de fuentes de datos externas.
+
+DA-013
+
+Las noticias no serán automaticamente guardadas. Solamente se guardaran cuando necesitemos hacewr un seguimiento historico, reusarlas, o requisitos de perfomance lo justifiquen

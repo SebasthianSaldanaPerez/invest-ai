@@ -186,6 +186,7 @@ Represent the person who uses InvestAI and owns the personalized investment info
 
 ### Business Rules
 -	A User must have a unique internal identifier.
+-	A User must have a unique email adress.
 -   A User can only have one active Strategy at a time.
 -   The alias is used to personalize AI-generated responses.
 -   Authentication information may be added when the system supports multiple users
@@ -303,6 +304,8 @@ Represent a news article related to a Company or Stock that may provide relevant
 - A News item must have a source and publication date.
 - Sentiment can be Positive, Neutral or Negative.
 - Duplicate News items should not be stored.
+- A News item can be associated with multiple Opportunity Evaluations.
+- A News item can be associated with multiple AI Analyses.
 
 ## Analyst Consensus
 
