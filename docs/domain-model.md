@@ -423,7 +423,6 @@ Represent the evaluation of an investment opportunity according to the User's ac
 - News Sentiment Component Score
 - Analyst Consensus Component Score
 - Risk Component Score
-- Explanation
 
 ### Relationships
 - An Opportunity Evaluation belongs to one Stock.

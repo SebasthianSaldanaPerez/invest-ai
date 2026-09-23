@@ -68,3 +68,8 @@ La lista de seguimiento almacena empresas, no el historial del mercado. La lista
 DA-013
 
 Las noticias no serán automaticamente guardadas. Solamente se guardaran cuando necesitemos hacewr un seguimiento historico, reusarlas, o requisitos de perfomance lo justifiquen
+
+DA-014
+
+El Opportunity Score es calculado mediante reglas determinadas y no dependerá de ningún modelo de lenguaje. La IA generativa se usará separado para dar
+explicaciones

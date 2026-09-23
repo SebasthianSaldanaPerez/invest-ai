@@ -325,7 +325,7 @@ Persist a collection of Stocks monitored by a User.
 **Constraints**
 
 - watchlist_id must be unique and not null.
-- user_id must not be null.
+- user_id must not be null and unique.
 - created_at must not be null.
 - updated_at must be greater than or equal to created_at when present.
 - a User can have one main Watchlist in the initial version
@@ -435,3 +435,320 @@ Persist relevant News used by InvestAI for historical analysis and traceability.
 - retrieved_at represents when InvestAI obtained the News.
 - Persisted News should remain unchanged to preserve historical context.
 - Duplicate News items should not be stored.
+
+### financial_statements
+
+**Purpose**
+
+Persist Financial Statements reported by a Company for specific fiscal periods.
+
+**Columns**
+
+- financial_statement_id
+- company_id
+- statement_type
+- fiscal_period
+- fiscal_year
+- publication_date
+- currency
+- financial_data
+
+**Primary Key**
+
+- financial_statement_id
+
+**Foreign Keys**
+
+- company_id → companies.company_id
+
+**Constraints**
+
+- financial_statement_id must be unique and not null.
+- company_id must not be null.
+- statement_type must identify whether the statement is an Income Statement, Balance Sheet or Cash Flow Statement.
+- fiscal_period must not be null.
+- fiscal_year must not be null.
+- publication_date must not be null.
+- currency must not be null.
+- financial_data must not be null.
+- company_id + statement_type + fiscal_period + fiscal_year must be unique.
+
+**Relationships**
+
+- A Financial Statement belongs to one Company.
+- A Company can have multiple Financial Statements.
+
+**Historical Considerations**
+
+- Historical Financial Statements must remain unchanged after being stored.
+- Each Financial Statement preserves the financial information reported for a specific fiscal period.
+
+Open Design Question:
+- Determine how financial_data will be physically represented
+  (e.g. structured columns, JSONB, or related financial metric records).
+
+### analyst_consensus
+
+**Purpose**
+
+Persist analyst consensus information for a Stock at a specific point in time.
+
+**Columns**
+
+- analyst_consensus_id
+- stock_id
+- date
+- target_price
+- recommendation
+- number_of_analysts
+
+**Primary Key**
+
+- analyst_consensus_id
+
+**Foreign Keys**
+
+- stock_id → stocks.stock_id
+
+**Constraints**
+
+- analyst_consensus_id must be unique and not null.
+- stock_id must not be null.
+- date must not be null.
+- target_price must be greater than 0.
+- recommendation can be null.
+- number_of_analysts must be greater than 0.
+- stock_id + date must be unique.
+
+**Relationships**
+
+- An Analyst Consensus belongs to one Stock.
+- A Stock can have multiple Analyst Consensus records over time.
+
+**Historical Considerations**
+
+- Each Analyst Consensus record represents the consensus available at a specific point in time.
+- Historical consensus records must not be overwritten when new consensus data becomes available.
+
+### opportunity_evaluations
+
+**Purpose**
+
+Persist Opportunity Evaluations generated for a Stock using a specific Strategy and the information available at a specific point in time.
+
+**Columns**
+
+- opportunity_evaluation_id
+- stock_id
+- strategy_id
+- score
+- evaluation_date
+- financial_component_score
+- technical_component_score
+- news_sentiment_component_score
+- analyst_consensus_component_score
+- risk_component_score
+
+**Primary Key**
+
+- opportunity_evaluation_id
+
+**Foreign Keys**
+
+- stock_id → stocks.stock_id
+- strategy_id → strategies.strategy_id
+
+**Constraints**
+
+- opportunity_evaluation_id must be unique and not null.
+- stock_id must not be null.
+- strategy_id must not be null.
+- evaluation_date must not be null.
+- score must not be null.
+- score must remain within the defined scoring range.
+- Each available Component Score must remain within the defined scoring range.
+- Component Scores can be null when the required information is unavailable.
+
+**Relationships**
+
+- An Opportunity Evaluation belongs to one Stock.
+- An Opportunity Evaluation uses one Strategy.
+- A Stock can have multiple Opportunity Evaluations over time.
+- A Strategy can be used by multiple Opportunity Evaluations.
+- A Trade can reference an Opportunity Evaluation available at the time of purchase.
+- An Opportunity Evaluation can be associated with multiple News items.
+
+**Historical Considerations**
+
+- Historical Opportunity Evaluations must not be overwritten when new evaluations are generated.
+- Each Opportunity Evaluation preserves the result generated using the information and Strategy available at that point in time.
+- Changes to a Strategy must not modify previously generated Opportunity Evaluations.
+- Component Scores preserve the values calculated at evaluation time.
+
+Open Design Question:
+- Define the final Opportunity Score range.
+- Define how missing Component Scores affect the final Score.
+
+### opportunity_evaluation_news
+
+**Purpose**
+
+Persist the relationship between an Opportunity Evaluation and the News items associated with it at the time of evaluation.
+
+**Columns**
+
+- opportunity_evaluation_id
+- news_id
+
+**Primary Key**
+
+- opportunity_evaluation_id + news_id
+
+**Foreign Keys**
+
+- opportunity_evaluation_id → opportunity_evaluations.opportunity_evaluation_id
+- news_id → news.news_id
+
+**Constraints**
+
+- opportunity_evaluation_id must not be null.
+- news_id must not be null.
+
+**Relationships**
+
+- An Opportunity Evaluation can be associated with multiple News items.
+- A News item can be associated with multiple Opportunity Evaluations.
+
+**Historical Considerations**
+
+- Existing News associations must not be overwritten when new Opportunity Evaluations are generated.
+- The relationship preserves which News items were associated with an Opportunity Evaluation at the time it was generated.
+
+### ai_analyses
+
+**Purpose**
+
+Persist AI-generated analyses for a Stock to preserve the generated result and its historical context.
+
+**Columns**
+
+- ai_analysis_id
+- stock_id
+- opportunity_evaluation_id
+- generated_at
+- analysis_text
+- model
+- prompt_version
+
+**Primary Key**
+
+- ai_analysis_id
+
+**Foreign Keys**
+
+- stock_id → stocks.stock_id
+- opportunity_evaluation_id → opportunity_evaluations.opportunity_evaluation_id
+
+**Constraints**
+
+- ai_analysis_id must be unique and not null.
+- stock_id must not be null.
+- opportunity_evaluation_id can be null.
+- generated_at must not be null.
+- analysis_text must not be null.
+- model must not be null.
+- prompt_version must not be null.
+
+**Relationships**
+
+- An AI Analysis belongs to one Stock.
+- A Stock can have multiple AI Analyses over time.
+- An AI Analysis can reference one Opportunity Evaluation.
+- An Opportunity Evaluation can be referenced by multiple AI Analyses.
+- An AI Analysis can be associated with multiple News items.
+
+**Historical Considerations**
+
+- Existing AI Analyses must not be overwritten when a new analysis is generated.
+- Each AI Analysis preserves the generated text, model and prompt version used at generation time.
+
+### ai_analysis_news
+
+**Purpose**
+
+Persist the relationship between an AI Analysis and the News items associated with it at the time the analysis was generated.
+
+**Columns**
+
+- ai_analysis_id
+- news_id
+
+**Primary Key**
+
+- ai_analysis_id + news_id
+
+**Foreign Keys**
+
+- ai_analysis_id → ai_analyses.ai_analysis_id
+- news_id → news.news_id
+
+**Constraints**
+
+- ai_analysis_id must not be null.
+- news_id must not be null.
+
+**Relationships**
+
+- An AI Analysis can be associated with multiple News items.
+- A News item can be associated with multiple AI Analyses.
+
+**Historical Considerations**
+
+- Existing News associations must not be overwritten when new AI Analyses are generated.
+- The relationship preserves which News items were associated with an AI Analysis at the time it was generated.
+
+### performance_reviews
+
+**Purpose**
+
+Persist AI-generated reviews of a User's historical investment performance.
+
+**Columns**
+
+- performance_review_id
+- user_id
+- generated_at
+- period_start
+- period_end
+- analysis_text
+- model
+- prompt_version
+
+**Primary Key**
+
+- performance_review_id
+
+**Foreign Keys**
+
+- user_id → users.user_id
+
+**Constraints**
+
+- performance_review_id must be unique and not null.
+- user_id must not be null.
+- generated_at must not be null.
+- analysis_text must not be null.
+- model must not be null.
+- prompt_version must not be null.
+- period_end must be greater than or equal to period_start when both are present.
+
+**Relationships**
+
+- A Performance Review belongs to one User.
+- A User can have multiple Performance Reviews over time.
+
+**Historical Considerations**
+
+- Existing Performance Reviews must not be overwritten when a new review is generated.
+- Each Performance Review preserves the generated text, model and prompt version used at generation time.
+- Each Performance Review preserves the period of historical performance analyzed when applicable.
